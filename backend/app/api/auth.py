@@ -38,13 +38,34 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     return {"access_token": access_token, "token_type": "bearer"}
 
 @router.post("/users", response_model=schemas.User)
-def create_user(user: schemas.UserCreate, parent_id: int, db: Session = Depends(get_db)):
+def create_user(user: schemas.UserCreate, parent_id: int = None, db: Session = Depends(get_db)):
     db_user = models.User(**user.dict(), parent_id=parent_id)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
     return db_user
 
-@router.get("/users/{parent_id}", response_model=list[schemas.User])
-def get_users_by_parent(parent_id: int, db: Session = Depends(get_db)):
-    return db.query(models.User).filter(models.User.parent_id == parent_id).all()
+@router.get("/users", response_model=list[schemas.User])
+def get_all_users(parent_id: int = None, db: Session = Depends(get_db)):
+    query = db.query(models.User)
+    if parent_id is not None:
+        query = query.filter(models.User.parent_id == parent_id)
+    return query.all()
+
+@router.put("/users/{user_id}/stats", response_model=schemas.User)
+def update_user_stats(user_id: int, stats_update: schemas.UserStatsUpdate, db: Session = Depends(get_db)):
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Merge existing stats with new stats
+    current_stats = dict(db_user.stats) if db_user.stats else {}
+    current_stats.update(stats_update.stats)
+    
+    # SQLAlchemy requires flagging JSON column as modified if mutated in-place,
+    # but since we assign a new dict, it works automatically.
+    db_user.stats = current_stats
+    
+    db.commit()
+    db.refresh(db_user)
+    return db_user

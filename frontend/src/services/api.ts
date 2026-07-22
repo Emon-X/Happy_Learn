@@ -26,6 +26,7 @@ export const authAPI = {
 }
 
 export const usersAPI = {
-  getUsersByParent: (parentId: number) => api.get(`/users/${parentId}`),
-  createUser: (parentId: number, data: any) => api.post(`/users?parent_id=${parentId}`, data),
+  getAllUsers: () => api.get('/users'),
+  createUser: (data: any) => api.post('/users', data),
+  updateStats: (userId: string, stats: any) => api.put(`/users/${userId}/stats`, { stats }),
 }

@@ -17,7 +17,8 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     avatar = Column(String)  # Identifier for picture avatar (e.g., 'dog', 'cat')
-    parent_id = Column(Integer, ForeignKey("parents.id"))
+    parent_id = Column(Integer, ForeignKey("parents.id"), nullable=True)
+    stats = Column(JSON, default=dict)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     
     parent = relationship("Parent", back_populates="children")

@@ -17,13 +17,17 @@ class Parent(ParentBase):
 class UserBase(BaseModel):
     name: str
     avatar: str
+    stats: dict = {}
 
 class UserCreate(UserBase):
     pass
 
+class UserStatsUpdate(BaseModel):
+    stats: dict
+
 class User(UserBase):
     id: int
-    parent_id: int
+    parent_id: Optional[int] = None
     created_at: datetime
     class Config:
         from_attributes = True

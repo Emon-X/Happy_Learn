@@ -29,3 +29,7 @@ app.include_router(auth.router, prefix="/api", tags=["auth"])
 @app.get("/")
 def read_root():
     return {"message": "Welcome to Happy Learn API"}
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}

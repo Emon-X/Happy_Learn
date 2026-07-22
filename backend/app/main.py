@@ -12,7 +12,7 @@ async def create_tables() -> None:
 
 origins = [
     "http://localhost:5173",
-    "https://ranking-system-zeta.vercel.app",
+    "https://happy-learn-omega.vercel.app",
 ]
 
 # CORS config

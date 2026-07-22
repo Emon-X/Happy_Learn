@@ -1,0 +1,31 @@
+# IDEs and OS
+.vscode/
+.idea/
+.DS_Store
+*.swp
+.gemini/
+
+# Node.js / Frontend
+node_modules/
+dist/
+build/
+npm-debug.log
+yarn-error.log
+
+# Python / Backend
+__pycache__/
+*.py[cod]
+*$py.class
+env/
+venv/
+.venv/
+pip-log.txt
+
+# Environment Variables
+.env
+.env.*.local
+
+# Databases
+*.sqlite3
+*.db
+backend/happy_learn.db
